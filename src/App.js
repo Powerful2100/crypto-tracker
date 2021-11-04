@@ -2,7 +2,7 @@ import React from 'react';
 import logo from "./logo.svg";
 import './App.css';
 import Coin from './components/Coin/Coin';
-
+import AccountBalance from './components/AccountBalance/AccountBalance';
 /*
 This imports are handeled by BABLE JS - similarly to React.React transformation.
 That imports are also transformed to some other js language construct that makes it possible
@@ -21,6 +21,8 @@ function App() {
         />
         <h1 className="App-title">Coin Exchange</h1>
       </header>
+
+      <AccountBalance amount={10000}/>
 
       <table className="coin-table">
         <thead>
