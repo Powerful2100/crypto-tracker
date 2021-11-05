@@ -8,7 +8,14 @@ const Td = styled.td`
     border: 1px solid grey;
     width: 25vh;
 `;
-
+const Button = styled.button`
+    width: 100%;
+    height: 2.75rem;
+    border: 2px solid grey;
+    border-radius: 10px;
+    background-color: rgb(180, 229, 255);
+    font-size: 1.25rem;
+`;
 export default class Coin extends Component {
     constructor(props){
         super(props);
@@ -47,9 +54,13 @@ export default class Coin extends Component {
         const randomPercentage = 0.995 + Math.random() * 0.01;
         this.setState(function(oldState){
             return{
-                price: (oldState.price * randomPercentage).toFixed(3)
+                price: (oldState.price * randomPercentage).toFixed(2)
             }
         });
+        /**
+         * There is a problem:
+         *      - this state is not synchronized with main state (state in App.js)
+         */
     }
 
     render() {
@@ -60,7 +71,7 @@ export default class Coin extends Component {
                 <Td>{this.state.price}€</Td>
                 <Td>
                     <form action="#" method="POST">
-                        <button onClick={this.handleClick}>Refresh</button>
+                        <Button onClick={this.handleClick}>Refresh</Button>
                     </form>
                 </Td>
             </tr>
