@@ -46,15 +46,36 @@ class App extends React.Component {
         }
       ]
     }
+    this.handleRefresh = this.handleRefresh.bind(this);
   }
 
+  //we get the ticker from coin.jsx
+  handleRefresh(valueChangedTicker) {
+    //we desctructure coinData to get only ticker and than compatre that ticker to ticker that is imported from child (refreshed coin)
+    const newCoinsData = this.state.coinData.map(function( {ticker, name, price} ) {
+      let newPrice = price; //price from arguments
+      if(valueChangedTicker === ticker) {
+        //we manipulate the price
+        const randomPercentage = 0.995 + Math.random() * 0.01;
+          newPrice = (newPrice * randomPercentage).toFixed(2);
+
+      }
+      return { //returns to newCoin
+        ticker, //is the same as ticker: ticker --> but because they match we can write just ticker, same for name
+        name,
+        price: newPrice
+      }
+    }); 
+
+    this.setState({ coinData: newCoinsData })
+  }
 
   render() {
     return (
       <Div>
         <Header />
         <AccountBalance amount={this.state.balance}/>
-        <CoinList coinData={this.state.coinData} />
+        <CoinList coinData={this.state.coinData} handleRefresh={this.handleRefresh}/>
         {
           /*
           We can also pass arrays. 

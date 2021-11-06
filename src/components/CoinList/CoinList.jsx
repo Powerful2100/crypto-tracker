@@ -56,7 +56,13 @@ export default class CoinList extends Component {
                   //We pass the state of main application as props - PROP DRILLING - you give the state of parent component (App) to child component (Coin)!
                   //And the child component may drill further and pass the state of the original grandparent component to the cild component fo the cild component!
                   //This way we can propogade (razmnožiti) state downwords in component hierchery App-->Coin-->...
-                  <Coin key={ticker} name={name} ticker={ticker} price={price} />
+                  <Coin 
+                    key={ticker} 
+                    handleRefresh={this.props.handleRefresh}
+                    name={name}
+                    ticker={ticker}
+                    price={price}
+                  />
                 )
               }
   
