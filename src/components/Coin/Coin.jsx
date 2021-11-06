@@ -11,10 +11,12 @@ const Td = styled.td`
 const Button = styled.button`
     width: 100%;
     height: 2.75rem;
-    border: 2px solid grey;
-    border-radius: 10px;
-    background-color: rgb(180, 229, 255);
+    background-color: rgb(221, 243, 255);
+    border: none;
     font-size: 1.25rem;
+    &:hover {
+        background-color: rgb(180, 229, 255);
+    }
 `;
 export default class Coin extends Component {
     constructor(props){

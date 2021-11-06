@@ -1,15 +1,18 @@
 import React from 'react';
-import logo from "./logo.svg";
-import './App.css';
-import Coin from './components/Coin/Coin';
+import CoinList from './components/CoinList/CoinList';
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import { v4 as uuidv4 } from 'uuid';
-
+import Header from './components/Header/Header';
+import styled from 'styled-components';
 /*
 This imports are handeled by BABLE JS - similarly to React.React transformation.
 That imports are also transformed to some other js language construct that makes it possible
 to import React from pacage (inside node_modules)
 */
+const Div = styled.div`
+  text-align: center;
+  background-color: rgb(221, 243, 255);
+`;
 
 class App extends React.Component {
   constructor(props){
@@ -48,71 +51,19 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-  
-        <header className="App-header">
-          <img 
-            src={logo}
-            alt="React Logo"
-            className="App-logo"
-          />
-          <h1 className="App-title">Coin Exchange</h1>
-        </header>
-  
+      <Div>
+        <Header />
         <AccountBalance amount={this.state.balance}/>
-  
-        <table className="coin-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Ticker</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            {
-              //RENDERING LISTS:
-                //We map the coinData array of objects
-                //for every item in coinData array function inside .map() is done
-                //for every coin in array we render Coin component
-                //we can desctructure value:
-                  //this.state.coinData.map(value => ...) --> BEFORE
-                  //this.state.coinData.map( ({name, ticker, price}) => ...) --> AFTER
-              this.state.coinData.map( ({name, ticker, price}) => 
-
-                /**
-                 * Whenever we render a list we need to add a special property to it called KEY
-                 * If there is no key - there is a problem - react wont know how to handle on each and every component inside the list
-                 * 
-                 * There are multiple options what key can be:
-                 *    - in our case can be coin ticker (every unique)
-                 *    - can also be made using UUID - npm package - glej uuid.txt
-                 *          <Coin key={value.key} name={value.name} ticker={value.ticker} price={value.price} />      
-                 * 
-                 * We can also do this:
-                 *  this.state.coinData.map(value => 
-                 *    <Coin key={value.ticker} {...value} />  
-                 *  )
-                 * ...value - is a spread operator that enumerates, spreads the key value pairs in component as props.
-                 *  {
-                 *    name: "Bitcoin",
-                 *    ticker: "BTC"
-                 *  }
-                 *  This would give a Coin compoenent name="Bitcoin" and ticker="BTC" properties!
-                 */
-
-                //We pass the state of main application as props - PROP DRILLING - you give the state of parent component (App) to child component (Coin)!
-                //And the child component may drill further and pass the state of the original grandparent component to the cild component fo the cild component!
-                //This way we can propogade (razmnožiti) state downwords in component hierchery App-->Coin-->...
-                <Coin key={ticker} name={name} ticker={ticker} price={price} />
-              )
-            }
-
-          </tbody>
-        </table>
-  
-      </div>
+        <CoinList coinData={this.state.coinData} />
+        {
+          /*
+          We can also pass arrays. 
+          We are passing state down as props - propagating the state - state changes on top levele - sub compnents get rerendered.
+          Now the state of the main app goes down 2 levels - App-->CoinList-->Coin
+          Now it is also easier to look at this App component.
+          */
+        }
+      </Div>
     );
   }
 }
