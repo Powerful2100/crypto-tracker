@@ -10,7 +10,6 @@ const Table = styled.table`
 
 export default class CoinList extends Component {
     render() {
-       
         return (
             <Table>
             <thead>

@@ -11,66 +11,56 @@ const Div = styled.div`
 `;
 
 class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      balance: 20000,
-      showBalance: false,
-      coinData: [
-        {
-          key: uuidv4(),
-          name: "Bitcoin",
-          ticker: "BTC",
-          balance: 0.25,
-          price: 63000.99
-        },
-        {
-          key: uuidv4(),
-          name: "Ethereum",
-          ticker: "ETH",
-          balance: 2,
+  state = {
+    balance: 20000,
+    showBalance: true,
+    coinData: [
+      {
+        key: uuidv4(),
+        name: "Bitcoin",
+        ticker: "BTC",
+        balance: 0.25,
+        price: 63000.99
+      },
+      {
+        key: uuidv4(),
+        name: "Ethereum",
+        ticker: "ETH",
+        balance: 2,
 
-          price: 4600.99
-        },
-        {
-          key: uuidv4(),
-          name: "Binance Coin",
-          ticker: "BNB",
-          balance: 1,
-          price: 550.99
-        },
-        {
-          key: uuidv4(),
-          name: "Solana",
-          ticker: "SOL",
-          balance: 1.25,
-          price: 240.99
-        }
-      ]
-    }
-    this.handleRefresh = this.handleRefresh.bind(this);
-    this.toggleBalance = this.toggleBalance.bind(this);
+        price: 4600.99
+      },
+      {
+        key: uuidv4(),
+        name: "Binance Coin",
+        ticker: "BNB",
+        balance: 1,
+        price: 550.99
+      },
+      {
+        key: uuidv4(),
+        name: "Solana",
+        ticker: "SOL",
+        balance: 1.25,
+        price: 240.99
+      }
+    ]
   }
 
 
-  handleRefresh(valueChangedTicker) {
-    const newCoinsData = this.state.coinData.map(function( {ticker, name, price, balance} ) {
-      let newPrice = price;
-      if(valueChangedTicker === ticker) {
+  handleRefresh = (valueChangedTicker) => {
+    const newCoinsData = this.state.coinData.map(function( values ) {
+      let newValues = {...values};
+      if(valueChangedTicker === newValues.ticker) {
         const randomPercentage = 0.995 + Math.random() * 0.01;
-          newPrice = (newPrice * randomPercentage).toFixed(2);
+        newValues.price = (newValues.price * randomPercentage).toFixed(2);
       }
-      return {
-        ticker,
-        name,
-        balance,
-        price: newPrice
-      }
+      return newValues
     }); 
     this.setState({ coinData: newCoinsData });
   }
 
-  toggleBalance() {
+  toggleBalance = () => {
     let newShowBalance = this.state.showBalance ? false : true;
     this.setState({ showBalance: newShowBalance });
   }
