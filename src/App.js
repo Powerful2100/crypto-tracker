@@ -15,28 +15,9 @@ const COIN_COUNT = 5;
 const formatPrice = (price) => Number((price).toFixed(3));
 
 function App(props) {
-  /*state = {
-    balance: 20000,
-    showBalance: true,
-    coinData: []
-  }
-  Re-written to ˇˇ HOOKS
-  
-    A lot of people also use this:
-      const [state, setState] = useState({
-        balance: 1000,
-        showBalance: true,
-        coinData: []
-      })
-      setState({balance: 11200}); This would just rewrite the whole object
-    
-
-    BEST NOTATION:
-        [name, function to change it] = React.useState(inital value)
-  const [balance, setBalance] = React.useState(20000);*/
   const [balance, setBalance] = useState(20000);
   const [showBalance, setShowBalance] = useState(true);
-  const [coinData, setCoinData] = useState([]); //--> empty array
+  const [coinData, setCoinData] = useState([]);
 
 
 
@@ -49,7 +30,7 @@ function App(props) {
       //Retrieve the prices:
       const tickerUrl = "https://api.coinpaprika.com/v1/tickers/";
       const promises = coinIds.map(id => axios.get(tickerUrl + id));
-      const coinData = await Promise.all(promises) //--> Array of promises
+      const coinData = await Promise.all(promises)
       const coinPriceData = coinData.map(response => {
         const coin = response.data;
         return {
@@ -60,21 +41,15 @@ function App(props) {
           price: formatPrice(coin.quotes["USD"].price)
         }
       });
-      //Renders - updates state
-      //this.setState({ coinData: coinPriceData }); //--> In this line table is rendered!!!
       setCoinData(coinPriceData);
     }catch(err){
       alert(err);
     }
   }
 
-  //Is called each time the componentDidMount or componentDidUpdate would be called!!
   useEffect(() => {
     if(coinData.length == 0){
-      //COMPONENT DID MOUNT
-      componentDidMount(); //--> useEffect can't be async function thats why we needed to have it in seperated function
-    }else{
-      //COMPONENT DID UPDATE
+      componentDidMount();
     }
   });
 
@@ -90,13 +65,10 @@ function App(props) {
       }
       return newValues;
     });
-    //this.setState({ coinData: newCoinData });
     setCoinData(newCoinData)
   }
 
   const toggleBalance = () => {
-    //let newShowBalance = this.state.showBalance ? false : true;
-    //this.setState({ showBalance: newShowBalance });
     setShowBalance(oldValue => !oldValue);
   }
 
