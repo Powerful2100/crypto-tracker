@@ -1,63 +1,64 @@
 import React from 'react';
 import CoinList from './components/CoinList/CoinList';
 import AccountBalance from './components/AccountBalance/AccountBalance';
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid'; 
 import Header from './components/Header/Header';
 import styled from 'styled-components';
+import axios from "axios";
 
 const Div = styled.div`
   text-align: center;
   background-color: rgb(221, 243, 255);
 `;
 
+const COIN_COUNT = 5;
+const formatPrice = (price) => Number((price).toFixed(2));
+
 class App extends React.Component {
   state = {
     balance: 20000,
     showBalance: true,
-    coinData: [
-      {
-        key: uuidv4(),
-        name: "Bitcoin",
-        ticker: "BTC",
-        balance: 0.25,
-        price: 63000.99
-      },
-      {
-        key: uuidv4(),
-        name: "Ethereum",
-        ticker: "ETH",
-        balance: 2,
+    coinData: []
+  }
 
-        price: 4600.99
-      },
-      {
-        key: uuidv4(),
-        name: "Binance Coin",
-        ticker: "BNB",
-        balance: 1,
-        price: 550.99
-      },
-      {
-        key: uuidv4(),
-        name: "Solana",
-        ticker: "SOL",
-        balance: 1.25,
-        price: 240.99
-      }
-    ]
+  //LIFECYCLE METHODS:
+  componentDidMount = async() => {
+    try{
+      //Get tokens:
+      const response = await axios.get("https://api.coinpaprika.com/v1/coins");
+      const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
+      //Retrieve the prices:
+      const tickerUrl = "https://api.coinpaprika.com/v1/tickers/";
+      const promises = coinIds.map(id => axios.get(tickerUrl + id));
+      const coinData = await Promise.all(promises) //--> Array of promises
+      const coinPriceData = coinData.map(response => {
+        const coin = response.data;
+        return {
+          key: coin.id,
+          name: coin.name,
+          ticker: coin.symbol,
+          balance: 0,
+          price: formatPrice(coin.quotes["USD"].price)
+        }
+      });
+      //Renders - updates state
+      this.setState({ coinData: coinPriceData }); //--> In this line table is rendered!!!
+    }catch(err){
+      alert(err);
+    }
   }
 
 
-  handleRefresh = (valueChangedTicker) => {
-    const newCoinsData = this.state.coinData.map(function( values ) {
-      let newValues = {...values};
-      if(valueChangedTicker === newValues.ticker) {
-        const randomPercentage = 0.995 + Math.random() * 0.01;
-        newValues.price = (newValues.price * randomPercentage).toFixed(2);
+  handleRefresh = async(coinId) => {
+    const coin = await axios.get(`https://api.coinpaprika.com/v1/tickers/${coinId}`);
+    const newCoinData = this.state.coinData.map((values) => {
+      let newValues = { ...values };
+      if (coinId === values.key) {
+          newValues.price = formatPrice(coin.data.quotes.USD.price);
       }
-      return newValues
-    }); 
-    this.setState({ coinData: newCoinsData });
+      return newValues;
+    });
+    this.setState({ coinData: newCoinData });
   }
 
   toggleBalance = () => {

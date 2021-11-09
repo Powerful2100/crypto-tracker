@@ -22,7 +22,7 @@ const Button = styled.button`
 export default class Coin extends Component {
     handleClick = (event) => {
         event.preventDefault();
-        this.props.handleRefresh(this.props.ticker);
+        this.props.handleRefresh(this.props.tickerId);
     }
 
     render() {
@@ -32,7 +32,7 @@ export default class Coin extends Component {
             <tr>
                 <Td>{this.props.name}</Td>
                 <Td>{this.props.ticker}</Td>
-                <Td>{this.props.price}€</Td>
+                <Td>$ {this.props.price}</Td>
                 {balances}
                 <Td>
                     <form action="#" method="POST">
@@ -47,5 +47,6 @@ export default class Coin extends Component {
 Coin.propTypes = {
     name: PropTypes.string.isRequired,
     ticker: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired
+    price: PropTypes.number.isRequired,
+    tickerId: PropTypes.string.isRequired
 }

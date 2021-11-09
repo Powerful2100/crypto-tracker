@@ -16,6 +16,7 @@ const Button = styled.button`
     border-radius: 20px;
     padding: 0.75rem;
     font-size: 1.65rem;
+    margin-bottom: 2rem;
     &:hover {
         background-color: rgb(180, 229, 255);
     }
@@ -32,6 +33,7 @@ export default class AccountBalance extends Component {
                 {renderBalance}
                 <br/>
                 <Button onClick={this.props.toggleBalance}>{buttonText}</Button>
+                <hr/>
             </Section>
         );
     }

@@ -3,29 +3,39 @@ import Coin from "../Coin/Coin";
 import styled from 'styled-components';
 
 const Table = styled.table`
-  margin: 50px auto 50px auto;
+  margin: 30px auto 50px auto;
+  border-collapse: collapse;
   display: inline-block;
   font-size: 1.4rem;
+`;
+const H1 = styled.h1`
+  margin-top: 50px;
+`;
+const Th = styled.th`
+border: 1px solid grey;
 `;
 
 export default class CoinList extends Component {
     render() {
         return (
-            <Table>
+          <>
+          <H1>Top 5 Cryptocurrencies by Market Cap:</H1>
+          <Table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Ticker</th>
-                <th>Price</th>
-                {this.props.showBalance ? <th>Balances</th> : null}
-                <th>Refresh</th>
+                <Th>Name</Th>
+                <Th>Ticker</Th>
+                <Th>Price</Th>
+                {this.props.showBalance ? <Th>Balances</Th> : null}
+                <Th>Refresh</Th>
               </tr>
             </thead>
             <tbody>
               {
-                this.props.coinData.map( ({name, ticker, price, balance}) => 
+                this.props.coinData.map( ({name, ticker, price, balance, key}) => 
                   <Coin 
-                    key={ticker} 
+                    key={key}
+                    tickerId={key}
                     handleRefresh={this.props.handleRefresh}
                     name={name}
                     ticker={ticker}
@@ -37,6 +47,7 @@ export default class CoinList extends Component {
               }
             </tbody>
           </Table>
+          </>
         )
     }
 }
