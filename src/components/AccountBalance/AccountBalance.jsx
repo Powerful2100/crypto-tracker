@@ -23,20 +23,18 @@ const Button = styled.button`
 `;
 
 
-export default class AccountBalance extends Component {
-    render() {
-        const buttonText = this.props.showBalance ? "Hide Balances" : "Show Balances"
-        const renderBalance = this.props.showBalance ? <span><Strong>Account Balance:</Strong><span>{this.props.amount}€</span></span> : null;
+export default function AccountBalance(props) {
+    const buttonText = props.showBalance ? "Hide Balances" : "Show Balances"
+    const renderBalance = props.showBalance ? <span><Strong>Account Balance:</Strong><span>{props.amount}€</span></span> : null;
 
-        return (
-            <Section>
-                {renderBalance}
-                <br/>
-                <Button onClick={this.props.toggleBalance}>{buttonText}</Button>
-                <hr/>
-            </Section>
-        );
-    }
+    return (
+        <Section>
+            {renderBalance}
+            <br/>
+            <Button onClick={props.toggleBalance}>{buttonText}</Button>
+            <hr/>
+        </Section>
+    );
 }
 
 

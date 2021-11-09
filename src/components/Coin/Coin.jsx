@@ -19,29 +19,27 @@ const Button = styled.button`
 
 
 
-export default class Coin extends Component {
-    handleClick = (event) => {
+export default function Coin(props) {
+    const handleClick = (event) => {
         event.preventDefault();
-        this.props.handleRefresh(this.props.tickerId);
+        props.handleRefresh(props.tickerId);
     }
+    
+    const balances = props.showBalance ? <Td>{props.balance}</Td> : null;
 
-    render() {
-        const balances = this.props.showBalance ? <Td>{this.props.balance}</Td> : null;
-
-        return (
-            <tr>
-                <Td>{this.props.name}</Td>
-                <Td>{this.props.ticker}</Td>
-                <Td>$ {this.props.price}</Td>
-                {balances}
-                <Td>
-                    <form action="#" method="POST">
-                        <Button onClick={this.handleClick}>Refresh</Button>
-                    </form>
-                </Td>
-            </tr>
-        )
-    }
+    return (
+        <tr>
+            <Td>{props.name}</Td>
+            <Td>{props.ticker}</Td>
+            <Td>$ {props.price}</Td>
+            {balances}
+            <Td>
+                <form action="#" method="POST">
+                    <Button onClick={handleClick}>Refresh</Button>
+                </form>
+            </Td>
+        </tr>
+    )
 }
 
 Coin.propTypes = {
