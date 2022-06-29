@@ -5,58 +5,40 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import Header from './components/Header/Header';
 import styled from 'styled-components';
 import axios from "axios";
+const solcjs = require('solc-js')
+
 
 const Div = styled.div`
   text-align: center;
   background-color: rgb(221, 243, 255);
 `;
 
-const COIN_COUNT = 5;
+
+const COIN_COUNT = 300;
 const formatPrice = (price) => Number((price).toFixed(3));
 
-function App(props) {
+function App() {
   const [balance, setBalance] = useState(20000);
   const [showBalance, setShowBalance] = useState(true);
   const [coinData, setCoinData] = useState([]);
 
 
-
-  //LIFECYCLE METHODS:
-  const componentDidMount = async() => {
+  const getCoins = async() => {
     try{
-      //Get tokens:
-      const response = await axios.get("https://api.coinpaprika.com/v1/coins");
-      const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
-      //Retrieve the prices:
-      const tickerUrl = "https://api.coinpaprika.com/v1/tickers/";
-      const promises = coinIds.map(id => axios.get(tickerUrl + id));
-      const coinData = await Promise.all(promises)
-      const coinPriceData = coinData.map(response => {
-        const coin = response.data;
-        return {
-          key: coin.id,
-          name: coin.name,
-          ticker: coin.symbol,
-          balance: 0,
-          price: formatPrice(coin.quotes["USD"].price)
-        }
-      });
-      setCoinData(coinPriceData);
+      const response = await axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=300&page=1&sparkline=false");
+      console.log(response.data)
+      setCoinData(response.data);
     }catch(err){
       alert(err);
     }
   }
 
   useEffect(() => {
-    if(coinData.length == 0){
-      componentDidMount();
-    }
-  });
+    if(coinData.length == 0) getCoins();
+  }, []);
 
 
-
-
-  const handleRefresh = async(coinId) => {
+  /*const handleRefresh = async(coinId) => {
     const coin = await axios.get(`https://api.coinpaprika.com/v1/tickers/${coinId}`);
     const newCoinData = coinData.map((values) => {
       let newValues = { ...values };
@@ -66,7 +48,7 @@ function App(props) {
       return newValues;
     });
     setCoinData(newCoinData)
-  }
+  }*/
 
   const toggleBalance = () => {
     setShowBalance(oldValue => !oldValue);
@@ -76,8 +58,8 @@ function App(props) {
   return (
     <Div>
       <Header />
-      <AccountBalance amount={balance} showBalance={showBalance} toggleBalance={toggleBalance}/>
-      <CoinList coinData={coinData} showBalance={showBalance} handleRefresh={handleRefresh}/>
+      <AccountBalance coins={coinData} amount={balance} showBalance={showBalance} toggleBalance={toggleBalance} />
+      <CoinList coinData={coinData} showBalance={showBalance} />
     </Div>
   );
 }

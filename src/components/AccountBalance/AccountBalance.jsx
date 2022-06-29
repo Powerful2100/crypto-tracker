@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import styled from 'styled-components';
+import { useMoralis } from "react-moralis";
+import Login from './Login';
+import Account from './Account';
+import Balance from './Balance';
 
 const Section = styled.section`
     margin-top: 4rem;
     font-size: 2rem;
-    text-align: center;
+    text-align: left;
+    padding-left: 5vw;
+    padding-right: 5vw;
 `;
 const Strong = styled.strong`
     margin-right: 2rem;
@@ -27,12 +33,15 @@ export default function AccountBalance(props) {
     const buttonText = props.showBalance ? "Hide Balances" : "Show Balances"
     const renderBalance = props.showBalance ? <span><Strong>Account Balance:</Strong><span>{props.amount}€</span></span> : null;
 
+    const { user } = useMoralis();
+
     return (
         <Section>
-            {renderBalance}
-            <br/>
-            <Button onClick={props.toggleBalance}>{buttonText}</Button>
-            <hr/>
+            {user ? (
+                <Balance coins={props.coins} />            
+            ):(
+                <Login />
+            )}
         </Section>
     );
 }
