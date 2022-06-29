@@ -20,22 +20,22 @@ const Section = styled.div`
 
 
 export default function Login() {
-    const { login, user, signup, logout } = useMoralis();
+    const { login, user, signup, logout, authError } = useMoralis();
 
     const [show, setShow] = useState(undefined);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    const handleUsernameChange = (event) => setUsername(event.target.value)
-    const handlePasswordChange = (event) => setPassword(event.target.value)
+    const handleUsernameChange = (event) => setUsername(event.target.value);
+    const handleEmailChange = (event) => setEmail(event.target.value);
+    const handlePasswordChange = (event) => setPassword(event.target.value);
     const showLogIn = () => setShow("login");
     const showSignUp = () => setShow("signup");
 
     const handleLogIn = async() => {
       try{
         await login(username, password);
-        alert("Logged In!");
       }catch(err){
         console.log(err)
         alert(err);
@@ -44,8 +44,11 @@ export default function Login() {
 
     const handleSignUp = async() => {
       try{
+        if(!username) return alert("Please fill in username!")
+        if(!password) return alert("Please fill in password!")
+        if(!email) return alert("Please fill in email!")
+
         await signup(username, password);
-        alert("Signed Up!");
       }catch(err){
         console.log(err)
         alert(err);
@@ -53,8 +56,12 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if(user) console.log(user)
+        if(user) alert("Logged in!")
     }, [user]);
+
+    useEffect(() => {
+      if(authError) alert(authError.message)
+    }, [authError]);
 
     return (
       <Section>
@@ -71,7 +78,7 @@ export default function Login() {
             <>
               <input placeholder='Username' value={username} onChange={handleUsernameChange} /><br/>
               <input placeholder='Passwors' value={password} onChange={handlePasswordChange} /><br/>
-              <input placeholder='Email' value={email} onChange={setEmail} /><br/>
+              <input placeholder='Email' value={email} onChange={handleEmailChange} /><br/>
               <Button onClick={handleSignUp}>Sign Up</Button><br/>
             </>
           ):null
