@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import axios from "axios";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import CoinPage from './components/CoinPage/CoinPage';
+import Missing from './components/Missing/Missing';
 
 const solcjs = require('solc-js')
 
@@ -64,7 +65,7 @@ function App() {
       <Div>
         <Header />
         <Routes>
-          <Route path='*' element={<h1>Missing Page!</h1>} />
+          <Route path='*' element={<Missing />} />
           <Route path='/' element={<CoinList coinData={coinData} showBalance={showBalance} />} />
           <Route path='/top' element={<CoinList coinData={coinData} showBalance={showBalance} />} />
           <Route path='/portfolio' element={<AccountBalance coins={coinData} amount={balance} showBalance={showBalance} toggleBalance={toggleBalance} />} />
