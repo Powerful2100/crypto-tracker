@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { LineChart } from "recharts";
+import { useMoralis } from "react-moralis";
 
 const Box = styled.div`
   text-align: left;
@@ -51,6 +52,9 @@ const numberWithCommas = (x) => {
 
 const CoinPage = ({ coin }) => {
 
+  const [balance, setBalance] = useState([]);
+  const { user } = useMoralis();
+
   const getPriceChange = (change) => {
     let color = change < 0 ? "red" : "green";
     return <span style={{ color: color }}>{Math.round(change * 10) / 10}%</span>
@@ -66,6 +70,33 @@ const CoinPage = ({ coin }) => {
     return `${part2} ${part1}`;
   }
 
+  const renderAsset = () => {
+    let _balance;
+    
+    balance.map(asset => {
+      if(asset.coin == coin.symbol) {
+        _balance = asset;
+      }
+    });
+
+    if(_balance) return `${numberWithCommas(_balance.amount)} ${_balance.coin.toUpperCase()} ($${numberWithCommas(Math.round(coin.current_price * _balance.amount * 10) / 10)})`;
+    return "You do not HODL this crypto. Add it in you portfolio.";
+  }
+
+  const getBalances = () => {
+    if(user) {
+      let balances = user.get("balances");
+      if(balances) {
+        setBalance(balances)
+      }
+    }
+  }
+
+  useEffect(() => {
+    getBalances();
+  }, [user]);
+
+
   return(
     <Box>
       <Header>
@@ -79,13 +110,17 @@ const CoinPage = ({ coin }) => {
       </Header>
 
       <Details>
+        {balance ? (
+          <h4><b>Your Balance: </b>{renderAsset()}</h4>
+        ):null}
+        <br/>
         <p><b>ALL Time High: </b> ${numberWithCommas(coin.ath)} {getPriceChange(coin.ath_change_percentage)} ({getDate(coin.ath_date)})</p>
         <p><b>ALL Time Low: </b> ${numberWithCommas(coin.atl)} {getPriceChange(coin.atl_change_percentage)} ({getDate(coin.atl_date)})</p>
         <p><b>Circulating Supply: </b> {numberWithCommas(coin.circulating_supply)} {coin.symbol.toUpperCase()}</p>
         <p><b>Max Supply: </b> {numberWithCommas(coin.max_supply)} {coin.symbol.toUpperCase()}</p>
         <p><b>Market Cap Rank: </b> #{numberWithCommas(coin.market_cap_rank)}</p>
         <p><b>Market Cap: </b> ${numberWithCommas(coin.market_cap)} {getPriceChange(coin.market_cap_change_percentage_24h)}</p>
-        <p><b>Fully Diluted Valuation: </b> ${numberWithCommas(coin.fully_diluted_valuation)}</p>
+        <p><b>Fully Diluted Valuation: </b> ${numberWithCommas(coin.fully_diluted_valuation ? coin.fully_diluted_valuation : coin.market_cap)}</p>
         <br/>
         <h4><b>Last Updated At: </b>{getLastuUpdatedAt(coin.last_updated)}</h4>
       </Details>

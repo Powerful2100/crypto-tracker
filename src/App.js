@@ -70,7 +70,7 @@ function App() {
           <Route path='/portfolio' element={<AccountBalance coins={coinData} amount={balance} showBalance={showBalance} toggleBalance={toggleBalance} />} />
           {coinData.map(coin => {
             return(
-              <Route key={coin.id} path={coin.id} element={<CoinPage coin={coin} />} />
+              <Route key={coin.id} path={coin.id} element={<CoinPage coin={coin} balance={null} />} />
             )
           })}
         </Routes>        
