@@ -67,7 +67,7 @@ export default class Header extends Component {
                         <Img 
                             src={logo}
                             alt="React Logo"
-                            />
+                        />
                         <H1>Crypto Price Tracker</H1>
                     </Logo>
                 </Link>

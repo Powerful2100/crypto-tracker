@@ -18,6 +18,7 @@
     "react-moralis": "^1.4.0",
     "react-router-dom": "6",
     "react-scripts": "4.0.3",
+    "recharts": "^2.1.12",
     "solc-js": "^1.0.1",
     "styled-components": "^5.3.3",
     "uuid": "^8.3.2",
