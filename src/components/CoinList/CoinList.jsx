@@ -21,7 +21,7 @@ const Th = styled.th`
 
 const Input = styled.input`
 margin-right: auto;
-    margin-top: 15vh;
+    margin-top: 7.5vh;
     text-align: left;
     display: flex;
     justify-self: left;
@@ -39,7 +39,7 @@ export default function CoinList(props) {
   return (
     <>
     <Input value={term} onChange={handleTerm} placeholder='Search by name or ticker . . .' />
-    <H1>Top 300 Cryptocurrencies by Market Cap:</H1>
+    <H1>Top 250 Cryptocurrencies by Market Cap:</H1>
     <Table>
       <thead>
         <tr>

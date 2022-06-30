@@ -5,6 +5,7 @@ import { Input } from "antd"
 import 'antd/dist/antd.css';
 import { Select } from 'antd';
 import Account from './Account';
+import { Link } from 'react-router-dom';
 const { Option } = Select;
 
 
@@ -55,6 +56,7 @@ const Portfolio = styled.div`
     padding: 2vw;
     border-radius: 2rem;
     background-color: rgb(180, 229, 255);
+    margin-bottom: 5vh;
 `;
 
 const Add = styled.div`
@@ -168,7 +170,7 @@ export default function Balance({ coins }) {
           if(asset.coin == coin.symbol) {
             assetsToRender.push({
               ...coin,
-              amount: asset.amount
+              amount: asset.amount,
             })
           }
         })
@@ -178,8 +180,10 @@ export default function Balance({ coins }) {
         return(
           <tr>
             <Td>
-                <img src={asset.image} alt="Coin Logo" width={30} height={30} />
-                {asset.name} ({asset.symbol.toUpperCase()})
+                <Link to={`/${asset.id}`}>
+                  <img src={asset.image} alt="Coin Logo" width={30} height={30} />
+                  {asset.name} ({asset.symbol.toUpperCase()})
+                </Link>
             </Td>
             <Td>${numberWithCommas(asset.current_price)}</Td>
             <Td>${numberWithCommas(Math.round(asset.current_price * asset.amount * 100) / 100)}</Td>

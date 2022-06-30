@@ -5,12 +5,16 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import Header from './components/Header/Header';
 import styled from 'styled-components';
 import axios from "axios";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import CoinPage from './components/CoinPage/CoinPage';
+
 const solcjs = require('solc-js')
 
 
 const Div = styled.div`
   text-align: center;
   background-color: rgb(221, 243, 255);
+  min-height: 100vh;
 `;
 
 
@@ -56,11 +60,22 @@ function App() {
 
 
   return (
-    <Div>
-      <Header />
-      <AccountBalance coins={coinData} amount={balance} showBalance={showBalance} toggleBalance={toggleBalance} />
-      <CoinList coinData={coinData} showBalance={showBalance} />
-    </Div>
+    <HashRouter>
+      <Div>
+        <Header />
+        <Routes>
+          <Route path='*' element={<h1>Missing Page!</h1>} />
+          <Route path='/' element={<CoinList coinData={coinData} showBalance={showBalance} />} />
+          <Route path='/top' element={<CoinList coinData={coinData} showBalance={showBalance} />} />
+          <Route path='/portfolio' element={<AccountBalance coins={coinData} amount={balance} showBalance={showBalance} toggleBalance={toggleBalance} />} />
+          {coinData.map(coin => {
+            return(
+              <Route key={coin.id} path={coin.id} element={<CoinPage coin={coin} />} />
+            )
+          })}
+        </Routes>        
+      </Div>
+    </HashRouter>
   );
 }
 
